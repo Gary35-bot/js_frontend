@@ -154,7 +154,7 @@ def login():
         password = request.form["password"]
         conn = sqlite3.connect("Sales.db")
         c = conn.cursor()
-        statement = (f"SELECT * FROM users WHERE username='{username}' and password ="
+        statement = (f"SELECT * FROM user WHERE username='{username}' and password ="
                      f"'{password}'")
         c.execute(statement)
         if not c.fetchone():
