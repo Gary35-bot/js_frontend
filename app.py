@@ -145,6 +145,30 @@ def get_user():
     return response
 
 
+@app.route('/login/', methods=['POST'])
+def login():
+    response = {}
+
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        conn = sqlite3.connect("Sales.db")
+        c = conn.cursor()
+        statement = (f"SELECT * FROM users WHERE username='{username}' and password ="
+                     f"'{password}'")
+        c.execute(statement)
+        if not c.fetchone():
+            response['message'] = "failed"
+            response["status_code"] = 401
+            return response
+        else:
+            response['message'] = "Signed in"
+            response["status_code"] = 201
+            return response
+    else:
+        return "wrong method"
+
+
 @app.route('/view-products/', methods=["GET"])
 def get_product():
     response = {}
@@ -209,7 +233,7 @@ def update_product(id):
                     cursor = conn.cursor()
                     cursor.execute("UPDATE market SET price =? WHERE id=?", (put_data["price"], id))
                     conn.commit()
-                    response["message"] = "price updated successfully"
+                    response["message"] = "price updated successfully and finally"
                     response["status_code"] = 200
     return response
 
